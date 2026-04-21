@@ -1,0 +1,1569 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Тендерный анализ ПИР | ПФО 2025–2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<style>
+  :root {
+    --color-bg: #f5f7fa;
+    --color-surface: #ffffff;
+    --color-text: #1a2035;
+    --color-text-muted: #5a6480;
+    --color-primary: #1e4799;
+    --color-primary-light: #e8eef8;
+    --color-accent: #f4801a;
+    --color-success: #2a8a52;
+    --color-warning: #d4860e;
+    --color-error: #c0392b;
+
+    /* Extra corporate palette */
+    --color-corp1: #1e4799;
+    --color-corp2: #e05c1a;
+    --color-corp3: #2a8a52;
+    --color-corp4: #6b3fa0;
+    --color-corp5: #0e7ea6;
+    --color-corp6: #d4860e;
+
+    --radius: 12px;
+    --shadow: 0 2px 16px rgba(30,71,153,0.08);
+    --shadow-md: 0 4px 24px rgba(30,71,153,0.13);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--color-bg);
+    color: var(--color-text);
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  /* ===== HEADER ===== */
+  .header {
+    background: linear-gradient(135deg, #0d1f4a 0%, #1e4799 55%, #1a3a7a 100%);
+    padding: 52px 48px 44px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h60v60H0z' fill='none'/%3E%3Ccircle cx='30' cy='30' r='1' fill='rgba(255,255,255,0.04)'/%3E%3C/svg%3E") repeat;
+    pointer-events: none;
+  }
+  .header-inner { max-width: 1280px; margin: 0 auto; position: relative; z-index: 1; }
+  .header-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 20px; padding: 5px 14px;
+    color: rgba(255,255,255,0.85); font-size: 12px; font-weight: 500;
+    letter-spacing: 0.04em; text-transform: uppercase;
+    margin-bottom: 18px;
+  }
+  .header h1 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: clamp(24px, 3vw, 38px);
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+  .header h1 span { color: #f4b942; }
+  .header-sub {
+    color: rgba(255,255,255,0.65);
+    font-size: 14px;
+    margin-bottom: 36px;
+  }
+
+  /* Glass KPI cards in header */
+  .glass-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+  }
+  .glass-card {
+    background: rgba(255,255,255,0.10);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: var(--radius);
+    padding: 20px 20px 16px;
+    color: #fff;
+  }
+  .glass-card .gc-label {
+    font-size: 11px; letter-spacing: 0.07em; text-transform: uppercase;
+    color: rgba(255,255,255,0.6); margin-bottom: 6px;
+  }
+  .glass-card .gc-value {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 28px; font-weight: 800;
+    line-height: 1; margin-bottom: 4px;
+    color: #fff;
+  }
+  .glass-card .gc-value.accent { color: #f4b942; }
+  .glass-card .gc-desc {
+    font-size: 12px; color: rgba(255,255,255,0.55);
+  }
+
+  /* ===== STICKY NAV ===== */
+  .sticky-nav {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--color-surface);
+    border-bottom: 2px solid var(--color-primary-light);
+    box-shadow: 0 2px 8px rgba(30,71,153,0.07);
+  }
+  .nav-inner {
+    max-width: 1280px; margin: 0 auto;
+    display: flex; align-items: center; gap: 0;
+    overflow-x: auto;
+    padding: 0 24px;
+    scrollbar-width: none;
+  }
+  .nav-inner::-webkit-scrollbar { display: none; }
+  .nav-link {
+    display: flex; align-items: center; gap: 6px;
+    padding: 14px 16px;
+    color: var(--color-text-muted);
+    font-size: 13px; font-weight: 500;
+    text-decoration: none;
+    white-space: nowrap;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+  }
+  .nav-link:hover, .nav-link.active {
+    color: var(--color-primary);
+    border-bottom-color: var(--color-primary);
+  }
+  .nav-link i { width: 14px; height: 14px; }
+
+  /* ===== MAIN LAYOUT ===== */
+  .main { max-width: 1280px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  /* ===== KPI ROW ===== */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 48px;
+  }
+  .kpi-card {
+    background: var(--color-surface);
+    border-radius: var(--radius);
+    padding: 24px;
+    box-shadow: var(--shadow);
+    border-left: 4px solid transparent;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .kpi-card.primary { border-left-color: var(--color-primary); }
+  .kpi-card.accent   { border-left-color: var(--color-accent); }
+  .kpi-card.success  { border-left-color: var(--color-success); }
+  .kpi-card.warning  { border-left-color: var(--color-warning); }
+  .kpi-card.corp4    { border-left-color: var(--color-corp4); }
+  .kpi-top { display: flex; align-items: center; justify-content: space-between; }
+  .kpi-icon {
+    width: 40px; height: 40px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .kpi-icon.primary-bg { background: var(--color-primary-light); color: var(--color-primary); }
+  .kpi-icon.accent-bg  { background: #fef0e5; color: var(--color-accent); }
+  .kpi-icon.success-bg { background: #e6f4ed; color: var(--color-success); }
+  .kpi-icon.warning-bg { background: #fef6e5; color: var(--color-warning); }
+  .kpi-icon.corp4-bg   { background: #f0ebf9; color: var(--color-corp4); }
+  .kpi-value {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 32px; font-weight: 800;
+    line-height: 1;
+    color: var(--color-text);
+  }
+  .kpi-label { font-size: 13px; color: var(--color-text-muted); font-weight: 500; }
+  .kpi-sub   { font-size: 12px; color: var(--color-text-muted); }
+
+  /* ===== SECTION ===== */
+  section {
+    margin-bottom: 56px;
+    scroll-margin-top: 64px;
+  }
+  .section-header {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--color-primary-light);
+  }
+  .section-icon {
+    width: 40px; height: 40px; border-radius: 10px;
+    background: var(--color-primary);
+    color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .section-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 20px; font-weight: 700;
+    color: var(--color-text);
+  }
+  .section-badge {
+    margin-left: auto;
+    background: var(--color-primary-light);
+    color: var(--color-primary);
+    font-size: 11px; font-weight: 600;
+    padding: 4px 10px; border-radius: 20px;
+    letter-spacing: 0.04em; text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  /* ===== GRID LAYOUTS ===== */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+  .grid-12 { display: grid; grid-template-columns: 1fr 2fr; gap: 24px; }
+  .grid-21 { display: grid; grid-template-columns: 2fr 1fr; gap: 24px; }
+
+  @media (max-width: 900px) {
+    .grid-2, .grid-3, .grid-12, .grid-21 { grid-template-columns: 1fr; }
+  }
+
+  /* ===== CARDS ===== */
+  .card {
+    background: var(--color-surface);
+    border-radius: var(--radius);
+    padding: 24px;
+    box-shadow: var(--shadow);
+  }
+  .card-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px; font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: 16px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .card-title i { width: 16px; height: 16px; color: var(--color-primary); }
+
+  /* ===== INSIGHT CARDS ===== */
+  .insight-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+  .insight-card {
+    background: var(--color-primary-light);
+    border: 1px solid rgba(30,71,153,0.12);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    display: flex; gap: 14px; align-items: flex-start;
+  }
+  .insight-card.accent-card { background: #fef0e5; border-color: rgba(244,128,26,0.2); }
+  .insight-card.success-card { background: #e6f4ed; border-color: rgba(42,138,82,0.2); }
+  .insight-card.warning-card { background: #fef6e5; border-color: rgba(212,134,14,0.2); }
+  .insight-card.error-card { background: #fde9e7; border-color: rgba(192,57,43,0.2); }
+  .insight-icon {
+    width: 36px; height: 36px; border-radius: 8px;
+    background: var(--color-primary); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .insight-icon.accent-icon  { background: var(--color-accent); }
+  .insight-icon.success-icon { background: var(--color-success); }
+  .insight-icon.warning-icon { background: var(--color-warning); }
+  .insight-icon.error-icon   { background: var(--color-error); }
+  .insight-text strong {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px; font-weight: 700; display: block; margin-bottom: 3px;
+    color: var(--color-text);
+  }
+  .insight-text p { font-size: 13px; color: var(--color-text-muted); line-height: 1.5; }
+
+  /* ===== TABLE ===== */
+  .table-wrap { overflow-x: auto; }
+  table.data-table {
+    width: 100%; border-collapse: collapse;
+    font-size: 13px;
+  }
+  .data-table thead tr {
+    background: var(--color-primary);
+    color: #fff;
+  }
+  .data-table th {
+    padding: 11px 14px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px; font-weight: 600;
+    text-align: left;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+  }
+  .data-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid #eef1f6;
+    color: var(--color-text);
+    vertical-align: middle;
+  }
+  .data-table tbody tr:nth-child(even) td { background: #f8fafd; }
+  .data-table tbody tr:hover td { background: var(--color-primary-light); }
+  .data-table tbody tr:last-child td { border-bottom: none; font-weight: 700; background: #edf2fc; }
+
+  /* badge */
+  .badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-size: 12px; font-weight: 600;
+  }
+  .badge-blue   { background: var(--color-primary-light); color: var(--color-primary); }
+  .badge-orange { background: #fef0e5; color: var(--color-accent); }
+  .badge-green  { background: #e6f4ed; color: var(--color-success); }
+  .badge-gray   { background: #eef1f6; color: var(--color-text-muted); }
+  .badge-purple { background: #f0ebf9; color: var(--color-corp4); }
+  .badge-yellow { background: #fef6e5; color: var(--color-warning); }
+
+  /* ===== CHART CONTAINER ===== */
+  .chart-container {
+    position: relative;
+    width: 100%;
+  }
+  .chart-container canvas { display: block; }
+
+  /* ===== PROGRESS BARS ===== */
+  .progress-list { display: flex; flex-direction: column; gap: 14px; }
+  .progress-item {}
+  .progress-meta {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 5px;
+  }
+  .progress-name { font-size: 13px; font-weight: 500; }
+  .progress-val  { font-size: 13px; font-weight: 700; color: var(--color-primary); }
+  .progress-track {
+    height: 8px; background: #eef1f6; border-radius: 4px; overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%; border-radius: 4px;
+    transition: width 1s ease;
+  }
+
+  /* Horizontal bar list */
+  .hbar-list { display: flex; flex-direction: column; gap: 12px; }
+  .hbar-item {}
+  .hbar-meta {
+    display: flex; justify-content: space-between; margin-bottom: 4px;
+  }
+  .hbar-label { font-size: 13px; color: var(--color-text); }
+  .hbar-cnt   { font-size: 13px; font-weight: 700; }
+  .hbar-track { height: 10px; background: #eef1f6; border-radius: 5px; overflow: hidden; }
+  .hbar-fill  { height: 100%; border-radius: 5px; }
+
+  /* Stat list */
+  .stat-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 10px 0; border-bottom: 1px solid #eef1f6;
+    font-size: 13px;
+  }
+  .stat-row:last-child { border-bottom: none; }
+  .stat-key { color: var(--color-text-muted); }
+  .stat-val { font-weight: 700; color: var(--color-text); }
+
+  /* tag cloud */
+  .tag-cloud { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tag {
+    padding: 5px 12px; border-radius: 20px;
+    font-size: 12px; font-weight: 500;
+    background: var(--color-primary-light);
+    color: var(--color-primary);
+    border: 1px solid rgba(30,71,153,0.15);
+  }
+  .tag.lg { font-size: 14px; padding: 7px 16px; font-weight: 600; }
+  .tag.sm { font-size: 11px; padding: 3px 9px; }
+  .tag.accent-tag { background: #fef0e5; color: var(--color-accent); border-color: rgba(244,128,26,0.2); }
+  .tag.gray-tag   { background: #eef1f6; color: var(--color-text-muted); border-color: #e0e4ef; }
+
+  /* barrier cards */
+  .barrier-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 14px; }
+  .barrier-card {
+    border: 1.5px solid var(--color-primary-light);
+    border-radius: var(--radius);
+    padding: 16px;
+    background: var(--color-surface);
+  }
+  .barrier-card h4 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px; font-weight: 700;
+    margin-bottom: 6px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .barrier-card h4 i { color: var(--color-primary); width: 15px; height: 15px; }
+  .barrier-card p { font-size: 12px; color: var(--color-text-muted); line-height: 1.5; }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    text-align: center; padding: 24px;
+    color: var(--color-text-muted); font-size: 12px;
+    border-top: 1px solid #e0e4ef;
+    margin-top: 48px;
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header class="header">
+  <div class="header-inner">
+    <div class="header-badge">
+      <i data-lucide="bar-chart-2" style="width:13px;height:13px;"></i>
+      Тендерный анализ рынка
+    </div>
+    <h1>ПИР, сметные расчёты и подготовка смет<br><span>Приволжский ФО и смежные регионы</span></h1>
+    <p class="header-sub">Период: январь 2025 — апрель 2026 &nbsp;|&nbsp; 58 закупочных процедур &nbsp;|&nbsp; 5 холдингов, 10 ДЗО &nbsp;|&nbsp; touchoil.pro</p>
+
+    <div class="glass-grid">
+      <div class="glass-card">
+        <div class="gc-label">Процедур всего</div>
+        <div class="gc-value accent">58</div>
+        <div class="gc-desc">За 15,5 месяцев</div>
+      </div>
+      <div class="glass-card">
+        <div class="gc-label">Лидер рынка</div>
+        <div class="gc-value" style="font-size:18px;line-height:1.3;">Татнефть</div>
+        <div class="gc-desc">43,1% выборки — 25 закупок</div>
+      </div>
+      <div class="glass-card">
+        <div class="gc-label">Рост 2026 г. (прогноз)</div>
+        <div class="gc-value accent">+95%</div>
+        <div class="gc-desc">Г/г (экстраполяция)</div>
+      </div>
+      <div class="glass-card">
+        <div class="gc-label">Раскрытие НМЦК</div>
+        <div class="gc-value" style="font-size:22px;">12,1%</div>
+        <div class="gc-desc">7 из 58 процедур</div>
+      </div>
+      <div class="glass-card">
+        <div class="gc-label">Реальная раскрытая НМЦК</div>
+        <div class="gc-value" style="font-size:18px;line-height:1.3;">1,33 млн</div>
+        <div class="gc-desc">Лишь индикативный минимум</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ===== STICKY NAV ===== -->
+<nav class="sticky-nav">
+  <div class="nav-inner">
+    <a href="#kpi" class="nav-link"><i data-lucide="layout-dashboard"></i> KPI</a>
+    <a href="#leaders" class="nav-link"><i data-lucide="trophy"></i> Лидеры</a>
+    <a href="#dynamics" class="nav-link"><i data-lucide="trending-up"></i> Динамика</a>
+    <a href="#by-customer" class="nav-link"><i data-lucide="users"></i> По заказчикам</a>
+    <a href="#goals" class="nav-link"><i data-lucide="target"></i> Цели</a>
+    <a href="#top" class="nav-link"><i data-lucide="star"></i> Топ-позиции</a>
+    <a href="#volume" class="nav-link"><i data-lucide="database"></i> Объём рынка</a>
+    <a href="#low" class="nav-link"><i data-lucide="arrow-down"></i> Низкий спрос</a>
+    <a href="#unique" class="nav-link"><i data-lucide="shield"></i> Барьеры входа</a>
+  </div>
+</nav>
+
+<!-- ===== MAIN ===== -->
+<main class="main">
+
+  <!-- KPI ROW -->
+  <section id="kpi" style="margin-bottom:40px;">
+    <div class="kpi-grid">
+      <div class="kpi-card primary">
+        <div class="kpi-top">
+          <div>
+            <div class="kpi-label">Всего процедур</div>
+            <div class="kpi-value">58</div>
+          </div>
+          <div class="kpi-icon primary-bg"><i data-lucide="file-text"></i></div>
+        </div>
+        <div class="kpi-sub">2025: 37 &nbsp;|&nbsp; 2026: 21 (янв–апр)</div>
+      </div>
+      <div class="kpi-card accent">
+        <div class="kpi-top">
+          <div>
+            <div class="kpi-label">Лидер — Татнефть</div>
+            <div class="kpi-value">43,1%</div>
+          </div>
+          <div class="kpi-icon accent-bg"><i data-lucide="trophy"></i></div>
+        </div>
+        <div class="kpi-sub">25 процедур, 5 холдингов в выборке</div>
+      </div>
+      <div class="kpi-card success">
+        <div class="kpi-top">
+          <div>
+            <div class="kpi-label">Темп 2026 г.</div>
+            <div class="kpi-value">6,0/мес</div>
+          </div>
+          <div class="kpi-icon success-bg"><i data-lucide="trending-up"></i></div>
+        </div>
+        <div class="kpi-sub">vs 3,08/мес в 2025 г. (+95%)</div>
+      </div>
+      <div class="kpi-card warning">
+        <div class="kpi-top">
+          <div>
+            <div class="kpi-label">Раскрыта НМЦК</div>
+            <div class="kpi-value">12,1%</div>
+          </div>
+          <div class="kpi-icon warning-bg"><i data-lucide="eye-off"></i></div>
+        </div>
+        <div class="kpi-sub">87,9% процедур без цены</div>
+      </div>
+      <div class="kpi-card corp4">
+        <div class="kpi-top">
+          <div>
+            <div class="kpi-label">Прогноз 2026</div>
+            <div class="kpi-value">~72</div>
+          </div>
+          <div class="kpi-icon corp4-bg"><i data-lucide="bar-chart"></i></div>
+        </div>
+        <div class="kpi-sub">Линейная экстраполяция по темпу</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 1. LEADERS -->
+  <section id="leaders">
+    <div class="section-header">
+      <div class="section-icon"><i data-lucide="trophy"></i></div>
+      <h2 class="section-title">1. Лидеры закупок</h2>
+      <span class="section-badge">5 холдингов</span>
+    </div>
+
+    <div class="grid-12">
+      <!-- Chart -->
+      <div class="card">
+        <div class="card-title"><i data-lucide="pie-chart"></i> Распределение процедур по холдингам</div>
+        <div class="chart-container" style="max-height:340px;">
+          <canvas id="leadersPieChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Table + bars -->
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <div class="card">
+          <div class="card-title"><i data-lucide="list"></i> Рейтинг холдингов</div>
+          <div class="progress-list">
+            <div class="progress-item">
+              <div class="progress-meta">
+                <span class="progress-name">Татнефть (2 ДЗО)</span>
+                <span class="progress-val">25 / 43,1%</span>
+              </div>
+              <div class="progress-track"><div class="progress-fill" style="width:43.1%;background:var(--color-corp1);"></div></div>
+            </div>
+            <div class="progress-item">
+              <div class="progress-meta">
+                <span class="progress-name">Роснефть (4 ДЗО)</span>
+                <span class="progress-val">14 / 24,1%</span>
+              </div>
+              <div class="progress-track"><div class="progress-fill" style="width:24.1%;background:var(--color-corp2);"></div></div>
+            </div>
+            <div class="progress-item">
+              <div class="progress-meta">
+                <span class="progress-name">Белкамнефть (1 ДЗО)</span>
+                <span class="progress-val">10 / 17,2%</span>
+              </div>
+              <div class="progress-track"><div class="progress-fill" style="width:17.2%;background:var(--color-corp3);"></div></div>
+            </div>
+            <div class="progress-item">
+              <div class="progress-meta">
+                <span class="progress-name">Лукойл (2 ДЗО)</span>
+                <span class="progress-val">5 / 8,6%</span>
+              </div>
+              <div class="progress-track"><div class="progress-fill" style="width:8.6%;background:var(--color-corp4);"></div></div>
+            </div>
+            <div class="progress-item">
+              <div class="progress-meta">
+                <span class="progress-name">Газпром нефть (1 ДЗО)</span>
+                <span class="progress-val">4 / 6,9%</span>
+              </div>
+              <div class="progress-track"><div class="progress-fill" style="width:6.9%;background:var(--color-corp5);"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><i data-lucide="user"></i> Топ-заказчики (ДЗО)</div>
+          <div class="stat-row"><span class="stat-key">ПАО «Татнефть» им. В.Д. Шашина</span><span class="stat-val"><span class="badge badge-blue">24 / 41,4%</span></span></div>
+          <div class="stat-row"><span class="stat-key">АО «Самаранефтегаз»</span><span class="stat-val"><span class="badge badge-orange">7 / 12,1%</span></span></div>
+          <div class="stat-row"><span class="stat-key">АО «Белкамнефть»</span><span class="stat-val"><span class="badge badge-green">10 / 17,2%</span></span></div>
+          <div class="stat-row"><span class="stat-key">ООО «Башнефть-Добыча»</span><span class="stat-val"><span class="badge badge-gray">3 / 5,2%</span></span></div>
+          <div class="stat-row"><span class="stat-key">ООО «Газпромнефть-Оренбург»</span><span class="stat-val"><span class="badge badge-purple">4 / 6,9%</span></span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="insight-grid" style="margin-top:16px;">
+      <div class="insight-card">
+        <div class="insight-icon"><i data-lucide="crown"></i></div>
+        <div class="insight-text">
+          <strong>Абсолютный чемпион — ПАО «Татнефть»</strong>
+          <p>24 процедуры (41,4% выборки) — определяет политику всего рассматриваемого рынка. Процедуры ведутся исключительно в формате «Запрос предложений» через собственную систему с 7-значной нумерацией.</p>
+        </div>
+      </div>
+      <div class="insight-card accent-card">
+        <div class="insight-icon accent-icon"><i data-lucide="graduation-cap"></i></div>
+        <div class="insight-text">
+          <strong>Роснефть — образовательный парадокс</strong>
+          <p>64% процедур сегмента (9 из 14) — это обучение сметному делу и аттестация ГИП, а не традиционное проектирование. Уникальная черта холдинга в данной выборке.</p>
+        </div>
+      </div>
+      <div class="insight-card success-card">
+        <div class="insight-icon success-icon"><i data-lucide="map-pin"></i></div>
+        <div class="insight-text">
+          <strong>Белкамнефть — единственный независимый</strong>
+          <p>10 процедур по 8 месторождениям Удмуртии. Стандартизированная система нумерации лотов «ДДММГГ/КС/N» говорит о чётком годовом закупочном плане.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. DYNAMICS -->
+  <section id="dynamics">
+    <div class="section-header">
+      <div class="section-icon"><i data-lucide="trending-up"></i></div>
+      <h2 class="section-title">2. Динамика закупок (общая)</h2>
+      <span class="section-badge">+95% г/г прогноз</span>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title"><i data-lucide="bar-chart-2"></i> Количество процедур по годам</div>
+        <div class="chart-container" style="max-height:300px;">
+          <canvas id="dynamicsBarChart"></canvas>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title"><i data-lucide="activity"></i> Среднемесячный темп закупок</div>
+        <div class="chart-container" style="max-height:300px;">
+          <canvas id="tempoChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px;">
+      <div class="card-title"><i data-lucide="table"></i> Сводная таблица динамики</div>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Показатель</th>
+              <th>2025 (полный год)</th>
+              <th>2026 (янв–апр, 3,5 мес.)</th>
+              <th>Прогноз 2026 (экстрап.)</th>
+              <th>Динамика</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Количество процедур, шт.</td>
+              <td>37</td>
+              <td>21</td>
+              <td>~72</td>
+              <td><span class="badge badge-green">+95% г/г</span></td>
+            </tr>
+            <tr>
+              <td>Среднемесячный темп</td>
+              <td>3,08 / мес.</td>
+              <td>6,00 / мес.</td>
+              <td>6,00 / мес.</td>
+              <td><span class="badge badge-green">+95%</span></td>
+            </tr>
+            <tr>
+              <td>Прирост за счёт Татнефти</td>
+              <td>11 проц.</td>
+              <td>14 проц.</td>
+              <td>~48 проц.</td>
+              <td><span class="badge badge-orange">+335% темп</span></td>
+            </tr>
+            <tr>
+              <td>Прочие 4 холдинга (без Татнефти)</td>
+              <td>26 проц. (2,17/мес.)</td>
+              <td>7 проц. (2,00/мес.)</td>
+              <td>~24 проц.</td>
+              <td><span class="badge badge-gray">Стабильно</span></td>
+            </tr>
+            <tr>
+              <td>Процедур с раскрытой НМЦК</td>
+              <td>6 (16,2%)</td>
+              <td>1 (4,8%)</td>
+              <td>—</td>
+              <td><span class="badge badge-yellow">↓ закрытость растёт</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="insight-grid" style="margin-top:16px;">
+      <div class="insight-card warning-card">
+        <div class="insight-icon warning-icon"><i data-lucide="alert-triangle"></i></div>
+        <div class="insight-text">
+          <strong>Рост почти полностью — заслуга Татнефти</strong>
+          <p>Без учёта Татнефти темп остальных четырёх холдингов практически не изменился: 2,00/мес. в 2026 против 2,17/мес. в 2025. Реального рыночного роста без Татнефти нет.</p>
+        </div>
+      </div>
+      <div class="insight-card">
+        <div class="insight-icon"><i data-lucide="calendar"></i></div>
+        <div class="insight-text">
+          <strong>Сезонность: февраль–март 2026</strong>
+          <p>11 из 14 процедур Татнефти в 2026 году сконцентрированы в феврале–марте — типичная контрактация перед летним строительным сезоном. Ожидать снижения темпа во 2–4 кв. 2026.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. BY CUSTOMER -->
+  <section id="by-customer">
+    <div class="section-header">
+      <div class="section-icon"><i data-lucide="users"></i></div>
+      <h2 class="section-title">3. Динамика по заказчикам</h2>
+      <span class="section-badge">5 холдингов в разрезе</span>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title"><i data-lucide="bar-chart"></i> Факт 2025 vs факт 2026 (янв–апр)</div>
+        <div class="chart-container" style="max-height:300px;">
+          <canvas id="byCustomerChart"></canvas>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title"><i data-lucide="bar-chart-2"></i> Прогноз 2026 (полный год)</div>
+        <div class="chart-container" style="max-height:300px;">
+          <canvas id="forecastChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px;">
+      <div class="card-title"><i data-lucide="table"></i> Динамика по каждому холдингу</div>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Холдинг</th>
+              <th>2025 (факт)</th>
+              <th>2026 янв–апр (факт)</th>
+              <th>Прогноз 2026</th>
+              <th>Динамика</th>
+              <th>Особенности</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Татнефть</strong></td>
+              <td>11</td>
+              <td>14</td>
+              <td>~48</td>
+              <td><span class="badge badge-green">Резкий рост +335%</span></td>
+              <td>АЗС-сегмент, ПО, пожарные системы</td>
+            </tr>
+            <tr>
+              <td><strong>Роснефть</strong></td>
+              <td>10</td>
+              <td>4</td>
+              <td>~14</td>
+              <td><span class="badge badge-green">Умеренный рост +37%</span></td>
+              <td>64% — обучение и аттестация</td>
+            </tr>
+            <tr>
+              <td><strong>Белкамнефть</strong></td>
+              <td>9</td>
+              <td>1</td>
+              <td>~3</td>
+              <td><span class="badge badge-orange">Снижение −62%</span></td>
+              <td>Цикл сдвинут на 2–3 кв. 2026</td>
+            </tr>
+            <tr>
+              <td><strong>Лукойл</strong></td>
+              <td>4</td>
+              <td>1</td>
+              <td>~3</td>
+              <td><span class="badge badge-yellow">−14%, стабильно</span></td>
+              <td>Внутр. ЭТП, НМЦК «1 руб.»</td>
+            </tr>
+            <tr>
+              <td><strong>Газпром нефть</strong></td>
+              <td>3</td>
+              <td>1</td>
+              <td>~3</td>
+              <td><span class="badge badge-gray">Стабильно +14%</span></td>
+              <td>Одно ДЗО — ГПН-Оренбург</td>
+            </tr>
+            <tr>
+              <td><strong>Итого</strong></td>
+              <td><strong>37</strong></td>
+              <td><strong>21</strong></td>
+              <td><strong>~72</strong></td>
+              <td><span class="badge badge-green">+95% г/г</span></td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. GOALS -->
+  <section id="goals">
+    <div class="section-header">
+      <div class="section-icon"><i data-lucide="target"></i></div>
+      <h2 class="section-title">4. Цели и предпосылки закупок</h2>
+      <span class="section-badge">6 категорий</span>
+    </div>
+
+    <div class="insight-grid">
+      <div class="insight-card">
+        <div class="insight-icon"><i data-lucide="drill"></i></div>
+        <div class="insight-text">
+          <strong>Обустройство месторождений и реконструкция</strong>
+          <p>Крупнейшая категория. Зрелые провинции ПФО требуют постоянной актуализации ПД: новые кусты скважин, нефтепроводы, точки врезки. 8 месторождений Белкамнефти, НГДУ Татнефти, Ардалинское НГП.</p>
+        </div>
+      </div>
+      <div class="insight-card accent-card">
+        <div class="insight-icon accent-icon"><i data-lucide="fuel"></i></div>
+        <div class="insight-text">
+          <strong>Розничная сеть АЗС Татнефти</strong>
+          <p>Стратегическое направление холдинга. 7 процедур: долгосрочные договоры на ПИР по группам АЗС, согласования с ГАИ РФ и ГК «Автодор», модернизация существующих объектов.</p>
+        </div>
+      </div>
+      <div class="insight-card warning-card">
+        <div class="insight-icon warning-icon"><i data-lucide="shield-alert"></i></div>
+        <div class="insight-text">
+          <strong>Нормативно обязательные проекты</strong>
+          <p>Требования МЧС (ОПС/СОУЭ), Росприроднадзора (СЗЗ, рекультивация), Ростехнадзора (декларации ОПО), Рослесхоза (лесные участки). Стабильный регулярный спрос.</p>
+        </div>
+      </div>
+      <div class="insight-card success-card">
+        <div class="insight-icon success-icon"><i data-lucide="graduation-cap"></i></div>
+        <div class="insight-text">
+          <strong>Обучение и аттестация ГИП (Роснефть)</strong>
+          <p>Централизованная программа подготовки сметной службы и ГИП-корпуса: ГРАНД-Смета, ценообразование в строительстве, профессиональные экзамены 7-го уровня НАРК.</p>
+        </div>
+      </div>
+      <div class="insight-card">
+        <div class="insight-icon"><i data-lucide="settings-2"></i></div>
+        <div class="insight-text">
+          <strong>Техническое перевооружение оборудования</strong>
+          <p>Модернизация котлоагрегатов, технологических печей ТАНЕКО, установка производства ПЭТ (АО «Экопэт», Калининград), новые химические производства Татнефти.</p>
+        </div>
+      </div>
+      <div class="insight-card">
+        <div class="insight-icon"><i data-lucide="monitor"></i></div>
+        <div class="insight-text">
+          <strong>Сметное и проектное ПО</strong>
+          <p>Роснефть стандартизировала три продукта: ГРАНД-Смета + Адепт:Проект + CADLib. Регулярные закупки обновлений и лицензий. Лукойл использует собственную ЭТП с НМЦК «1 руб.».</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px;">
+      <div class="card-title"><i data-lucide="zap"></i> Ключевые предпосылки и драйверы спроса</div>
+      <div class="grid-3">
+        <div>
+          <p style="font-size:13px;font-weight:700;margin-bottom:8px;color:var(--color-primary);">Первичный драйвер</p>
+          <p style="font-size:13px;color:var(--color-text-muted);">Поддержание и модернизация зрелой добычи Волго-Уральской провинции. Татарстан, Башкортостан, Удмуртия, Самарская и Оренбургская области — старейшие российские нефтеносные регионы с постоянной потребностью в актуализации ПД.</p>
+        </div>
+        <div>
+          <p style="font-size:13px;font-weight:700;margin-bottom:8px;color:var(--color-primary);">Регуляторные требования</p>
+          <p style="font-size:13px;color:var(--color-text-muted);">123-ФЗ (пожарная безопасность), 7-ФЗ (охрана окружающей среды), 116-ФЗ (промышленная безопасность ОПО), Лесной кодекс РФ, Закон «О недрах» — формируют обязательный нормативный спрос вне инвестиционного цикла.</p>
+        </div>
+        <div>
+          <p style="font-size:13px;font-weight:700;margin-bottom:8px;color:var(--color-primary);">Розничный бизнес</p>
+          <p style="font-size:13px;color:var(--color-text-muted);">Долгосрочное развитие сети АЗС Татнефти создаёт устойчивый годовой портфель ПИР независимо от добычного цикла. Договоры покрывают группы объектов одновременно.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. TOP POSITIONS -->
+  <section id="top">
+    <div class="section-header">
+      <div class="section-icon"><i data-lucide="star"></i></div>
+      <h2 class="section-title">5. Топ-позиции рынка</h2>
+      <span class="section-badge">12 категорий</span>
+    </div>
+
+    <div class="grid-21">
+      <div class="card">
+        <div class="card-title"><i data-lucide="bar-chart-horizontal"></i> Структура спроса по типам услуг</div>
+        <div class="chart-container" style="max-height:380px;">
+          <canvas id="topPositionsChart"></canvas>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title"><i data-lucide="list-ordered"></i> Топ-3 категории</div>
+        <div style="display:flex;flex-direction:column;gap:16px;">
+          <div style="background:var(--color-primary-light);border-radius:10px;padding:16px;">
+            <div style="font-family:'Montserrat',sans-serif;font-size:22px;font-weight:800;color:var(--color-primary);">27,6%</div>
+            <div style="font-size:13px;font-weight:600;margin:4px 0;">ПИР обустройства месторождений</div>
+            <div style="font-size:12px;color:var(--color-text-muted);">16 процедур. Белкамнефть, Татнефть, Удмуртнефть, РИТЭК, ГПН-Оренбург</div>
+          </div>
+          <div style="background:#fef0e5;border-radius:10px;padding:16px;">
+            <div style="font-family:'Montserrat',sans-serif;font-size:22px;font-weight:800;color:var(--color-accent);">13,8%</div>
+            <div style="font-size:13px;font-weight:600;margin:4px 0;">Обучение и аттестация</div>
+            <div style="font-size:12px;color:var(--color-text-muted);">8 процедур. Исключительно Роснефть (Самаранефтегаз, Удмуртнефть, Башнефть-Добыча)</div>
+          </div>
+          <div style="background:#e6f4ed;border-radius:10px;padding:16px;">
+            <div style="font-family:'Montserrat',sans-serif;font-size:22px;font-weight:800;color:var(--color-success);">12,1%</div>
+            <div style="font-size:13px;font-weight:600;margin:4px 0;">ПИР объектов АЗС</div>
+            <div style="font-size:12px;color:var(--color-text-muted);">7 процедур. Исключительно Татнефть / Татнефть-АЗС Центр</div>
+          </div>
+          <div style="background:#eef1f6;border-radius:10px;padding:12px 16px;">
+            <div style="font-size:12px;color:var(--color-text-muted);">Первые три категории суммарно — <strong style="color:var(--color-text);">53,5%</strong> всех процедур</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px;">
+      <div class="card-title"><i data-lucide="table"></i> Полная таблица позиций</div>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Номенклатура</th>
+              <th>Процедур</th>
+              <th>Доля, %</th>
+              <th>Основные заказчики</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>ПИР обустройства месторождений, реконструкции промысловых объектов</td>
+              <td>16</td>
+              <td><span class="badge badge-blue">27,6%</span></td>
+              <td>Белкамнефть, Татнефть, Удмуртнефть, РИТЭК, ГПН-Оренбург</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>Обучение и аттестация (ценообразование, сметное дело, ГИП)</td>
+              <td>8</td>
+              <td><span class="badge badge-orange">13,8%</span></td>
+              <td>Самаранефтегаз, Удмуртнефть, Башнефть-Добыча</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>ПИР объектов АЗС и дорожного сервиса</td>
+              <td>7</td>
+              <td><span class="badge badge-green">12,1%</span></td>
+              <td>Татнефть / Татнефть-АЗС Центр</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>Сметное / проектное ПО (ГРАНД-Смета, Адепт:Проект, CADLib)</td>
+              <td>4</td>
+              <td><span class="badge badge-gray">6,9%</span></td>
+              <td>Башнефть-Добыча, Удмуртнефть, Оренбургнефть</td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td>Пожарная сигнализация и системы оповещения (ОПС/СОУЭ)</td>
+              <td>4</td>
+              <td><span class="badge badge-gray">6,9%</span></td>
+              <td>Татнефть</td>
+            </tr>
+            <tr>
+              <td>6</td>
+              <td>Экологические проекты (рекультивация, лесные, СЗЗ, биоресурсы)</td>
+              <td>4</td>
+              <td><span class="badge badge-gray">6,9%</span></td>
+              <td>Белкамнефть, Татнефть, РИТЭК</td>
+            </tr>
+            <tr>
+              <td>7</td>
+              <td>Техническое перевооружение оборудования и установок</td>
+              <td>3</td>
+              <td><span class="badge badge-yellow">5,2%</span></td>
+              <td>Татнефть (ТАНЕКО, Экопэт)</td>
+            </tr>
+            <tr>
+              <td>8</td>
+              <td>Прочие (экспертиза ПД, ИБ, декларации ОПО, поиск партнёров)</td>
+              <td>4</td>
+              <td><span class="badge badge-gray">6,9%</span></td>
+              <td>ГПН-Оренбург, Татнефть, Лукойл-Пермь</td>
+            </tr>
+            <tr>
+              <td>9</td>
+              <td>Геологическое изучение и подземные воды</td>
+              <td>2</td>
+              <td><span class="badge badge-gray">3,4%</span></td>
+              <td>Лукойл-Пермь</td>
+            </tr>
+            <tr>
+              <td>10</td>
+              <td>Инженерные изыскания (маркшейдерские, радиационные)</td>
+              <td>2</td>
+              <td><span class="badge badge-gray">3,4%</span></td>
+              <td>Белкамнефть, Татнефть</td>
+            </tr>
+            <tr>
+              <td>11</td>
+              <td>Межевание земель и кадастровые работы</td>
+              <td>2</td>
+              <td><span class="badge badge-gray">3,4%</span></td>
+              <td>ГПН-Оренбург</td>
+            </tr>
+            <tr>
+              <td>12</td>
+              <td>Спец. проектные работы (комплекс ХОС, роботизированные элеваторы)</td>
+              <td>2</td>
+              <td><span class="badge badge-gray">3,4%</span></td>
+              <td>Самаранефтегаз, Татнефть</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td><strong>Итого</strong></td>
+              <td><strong>58</strong></td>
+              <td><strong>100%</strong></td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. VOLUME -->
+  <section id="volume">
+    <div class="section-header">
+      <div class="section-icon"><i data-lucide="database"></i></div>
+      <h2 class="section-title">6. Объём рынка</h2>
+      <span class="section-badge">Количественный анализ</span>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title"><i data-lucide="pie-chart"></i> Тип процедуры (распределение)</div>
+        <div class="chart-container" style="max-height:280px;">
+          <canvas id="procedureTypeChart"></canvas>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title"><i data-lucide="map"></i> География закупок</div>
+        <div class="hbar-list">
+          <div class="hbar-item">
+            <div class="hbar-meta"><span class="hbar-label">Республика Татарстан</span><span class="hbar-cnt" style="color:var(--color-corp1);">~27 проц.</span></div>
+            <div class="hbar-track"><div class="hbar-fill" style="width:46%;background:var(--color-corp1);"></div></div>
+          </div>
+          <div class="hbar-item">
+            <div class="hbar-meta"><span class="hbar-label">Удмуртская Республика</span><span class="hbar-cnt" style="color:var(--color-corp2);">~16 проц.</span></div>
+            <div class="hbar-track"><div class="hbar-fill" style="width:28%;background:var(--color-corp2);"></div></div>
+          </div>
+          <div class="hbar-item">
+            <div class="hbar-meta"><span class="hbar-label">Самарская область</span><span class="hbar-cnt" style="color:var(--color-corp3);">~9 проц.</span></div>
+            <div class="hbar-track"><div class="hbar-fill" style="width:16%;background:var(--color-corp3);"></div></div>
+          </div>
+          <div class="hbar-item">
+            <div class="hbar-meta"><span class="hbar-label">Оренбургская область</span><span class="hbar-cnt" style="color:var(--color-corp4);">~5 проц.</span></div>
+            <div class="hbar-track"><div class="hbar-fill" style="width:9%;background:var(--color-corp4);"></div></div>
+          </div>
+          <div class="hbar-item">
+            <div class="hbar-meta"><span class="hbar-label">Пермский край + Коми</span><span class="hbar-cnt" style="color:var(--color-corp5);">~5 проц.</span></div>
+            <div class="hbar-track"><div class="hbar-fill" style="width:9%;background:var(--color-corp5);"></div></div>
+          </div>
+          <div class="hbar-item">
+            <div class="hbar-meta"><span class="hbar-label">Прочие регионы</span><span class="hbar-cnt" style="color:var(--color-text-muted);">~6 проц.</span></div>
+            <div class="hbar-track"><div class="hbar-fill" style="width:10%;background:#ccc;"></div></div>
+          </div>
+        </div>
+        <p style="margin-top:12px;font-size:12px;color:var(--color-text-muted);">*Распределение ориентировочное на основании анализа предметов и заказчиков</p>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px;">
+      <div class="card-title"><i data-lucide="banknote"></i> Стоимостной объём (по раскрытой НМЦК)</div>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Показатель</th>
+              <th>2025</th>
+              <th>2026 (янв–апр)</th>
+              <th>Итого</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Количество процедур, шт.</td>
+              <td>37</td>
+              <td>21</td>
+              <td>58</td>
+            </tr>
+            <tr>
+              <td>С раскрытой НМЦК — всего</td>
+              <td>6 (16,2%)</td>
+              <td>1 (4,8%)</td>
+              <td>7 (12,1%)</td>
+            </tr>
+            <tr>
+              <td>в т.ч. с номинальной «1 руб.» (Лукойл ЭТП)</td>
+              <td>3</td>
+              <td>1</td>
+              <td>4</td>
+            </tr>
+            <tr>
+              <td>в т.ч. с реальной НМЦК</td>
+              <td>3</td>
+              <td>0</td>
+              <td>3</td>
+            </tr>
+            <tr>
+              <td>Сумма реальной раскрытой НМЦК</td>
+              <td>1 332 509,20 руб.</td>
+              <td>0 руб.</td>
+              <td><strong>1 332 509,20 руб.</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="insight-card error-card" style="margin-top:16px;">
+        <div class="insight-icon error-icon"><i data-lucide="alert-circle"></i></div>
+        <div class="insight-text">
+          <strong>Критическое ограничение: денежная ёмкость рынка не определима</strong>
+          <p>По 87,9% процедур НМЦК отсутствует. Раскрытая сумма 1,33 млн руб. — лишь индикативная нижняя граница, относящаяся к поставке ПО и одному мелкому лоту. Реальная стоимость рынка ПИР на порядки выше, но оценить её по имеющимся данным невозможно.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. LOW DEMAND -->
+  <section id="low">
+    <div class="section-header">
+      <div class="section-icon"><i data-lucide="arrow-down-circle"></i></div>
+      <h2 class="section-title">7. Позиции с низким спросом</h2>
+      <span class="section-badge">«Длинный хвост» рынка</span>
+    </div>
+
+    <div class="card" style="margin-bottom:16px;">
+      <div class="card-title"><i data-lucide="list"></i> Единичные узкоспециализированные лоты (1 процедура каждый)</div>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Позиция</th>
+              <th>Заказчик / Тендер</th>
+              <th>Специфика / Лицензии</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Инженерные изыскания с радиационным обследованием</td>
+              <td>Татнефть, 4364962</td>
+              <td><span class="badge badge-orange">Лицензия Роспотребнадзора/Росатома</span></td>
+            </tr>
+            <tr>
+              <td>Маркшейдерско-геодезические работы (топопланы 1:5000 и 1:500)</td>
+              <td>Белкамнефть, 150125/НП/1</td>
+              <td><span class="badge badge-orange">Лицензия Ростехнадзора (маркшейдерия)</span></td>
+            </tr>
+            <tr>
+              <td>Проектирование аналитического комплекса (ХОС в нефти)</td>
+              <td>Самаранефтегаз, РН60103065</td>
+              <td><span class="badge badge-purple">Аналитическое приборостроение</span></td>
+            </tr>
+            <tr>
+              <td>Разработка схем и изготовление роботизированных элеваторов</td>
+              <td>Татнефть, 4364377</td>
+              <td><span class="badge badge-purple">Конструкторско-производственная ниша</span></td>
+            </tr>
+            <tr>
+              <td>Проектирование систем информационной безопасности НПЗ (ТАНЕКО)</td>
+              <td>Татнефть, 4360818</td>
+              <td><span class="badge badge-orange">Лицензия ФСТЭК (КИИ)</span></td>
+            </tr>
+            <tr>
+              <td>Базовый проект установки производства кремнекислотного наполнителя</td>
+              <td>Татнефть, 4018257</td>
+              <td><span class="badge badge-purple">Нефтехимическая специализация</span></td>
+            </tr>
+            <tr>
+              <td>Технологический регламент на проектирование установки подготовки нефти</td>
+              <td>Татнефть, 4274488</td>
+              <td><span class="badge badge-gray">Предпроектный этап</span></td>
+            </tr>
+            <tr>
+              <td>РД и расчёты параметров работы технологических печей ТАНЕКО</td>
+              <td>Татнефть, 4312400</td>
+              <td><span class="badge badge-gray">Нефтепереработка, термодинамика</span></td>
+            </tr>
+            <tr>
+              <td>Декларации промышленной безопасности для ОПО</td>
+              <td>Лукойл-Пермь, COM18032500014</td>
+              <td><span class="badge badge-orange">Лицензия Ростехнадзора (экспертиза)</span></td>
+            </tr>
+            <tr>
+              <td>Поиск партнёров по направлению ПИР (предквалификация)</td>
+              <td>Татнефть, 4263870</td>
+              <td><span class="badge badge-gray">Нетипичный формат — реестр подрядчиков</span></td>
+            </tr>
+            <tr>
+              <td>Негосударственная экспертиза проектной документации</td>
+              <td>ГПН-Оренбург, 01-3041458-524-2025</td>
+              <td><span class="badge badge-orange">Аккредитация Росаккредитации</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="insight-card warning-card">
+      <div class="insight-icon warning-icon"><i data-lucide="info"></i></div>
+      <div class="insight-text">
+        <strong>Паттерн «длинного хвоста»</strong>
+        <p>Позиции с низким спросом — узкоспециализированные работы с высокими лицензионными барьерами (ФСТЭК, Росатом, Ростехнадзор, Росаккредитация) при небольшом годовом объёме. Конкуренция в них ограничена кругом аккредитованных исполнителей, но и рыночный потенциал невелик. Для новых участников эти ниши малопривлекательны из-за стоимости получения допусков при единичном спросе.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. BARRIERS / UNIQUE -->
+  <section id="unique">
+    <div class="section-header">
+      <div class="section-icon"><i data-lucide="shield"></i></div>
+      <h2 class="section-title">8. Барьеры входа и уникальность рынка</h2>
+      <span class="section-badge">Специфика ПФО</span>
+    </div>
+
+    <div class="barrier-grid">
+      <div class="barrier-card">
+        <h4><i data-lucide="shield-check"></i> СРО проектировщиков</h4>
+        <p>Обязательное членство в саморегулируемой организации проектировщиков и изыскателей по Градостроительному кодексу РФ — базовый барьер для любых ПИР по объектам капстроительства.</p>
+      </div>
+      <div class="barrier-card">
+        <h4><i data-lucide="hard-hat"></i> Лицензии Ростехнадзора</h4>
+        <p>Проектирование ОПО, проведение экспертизы промышленной безопасности, маркшейдерские работы на горных отводах — требуются для большинства лотов по обустройству месторождений и техперевооружению.</p>
+      </div>
+      <div class="barrier-card">
+        <h4><i data-lucide="radiation"></i> Лицензия Роспотребнадзора/Росатома</h4>
+        <p>Работа с источниками ионизирующего излучения — требуется для комплексных инженерных изысканий с радиационным обследованием объектов (Татнефть, тендер 4364962).</p>
+      </div>
+      <div class="barrier-card">
+        <h4><i data-lucide="lock"></i> Лицензия ФСТЭК России</h4>
+        <p>Техническая защита конфиденциальной информации — для проектирования систем ИБ объектов критической информационной инфраструктуры НПЗ АО «ТАНЕКО» (Татнефть, 4360818).</p>
+      </div>
+      <div class="barrier-card">
+        <h4><i data-lucide="check-circle"></i> Аккредитация Росаккредитации</h4>
+        <p>Проведение негосударственной экспертизы проектной документации (ГПН-Оренбург). Требует отдельного прохождения аккредитационной процедуры.</p>
+      </div>
+      <div class="barrier-card">
+        <h4><i data-lucide="map"></i> Кадастровые инженеры</h4>
+        <p>Аттестованные кадастровые инженеры — члены СРО КИ — для процедур межевания земель ГПН-Оренбург и работы с лесными участками Белкамнефти.</p>
+      </div>
+      <div class="barrier-card">
+        <h4><i data-lucide="car"></i> Согласования с ГАИ и ГК «Автодор»</h4>
+        <p>Уникальная черта АЗС-сегмента Татнефти: опыт согласований с нетипичными для ПИР по нефтедобыче регуляторами — обязательное требование в 2+ процедурах.</p>
+      </div>
+      <div class="barrier-card">
+        <h4><i data-lucide="graduation-cap"></i> Аттестация ГИП (НАРК)</h4>
+        <p>Профессиональный экзамен 7-го уровня «Главный инженер проекта» — корпоративное требование Роснефти для ключевых специалистов. Роснефть регулярно проводит аттестационные тендеры.</p>
+      </div>
+      <div class="barrier-card">
+        <h4><i data-lucide="monitor"></i> Корпоративные стандарты ПО</h4>
+        <p>Роснефть: ГРАНД-Смета + Адепт:Проект + CADLib. Лукойл: собственная ЭТП. Татнефть: закрытая система «Запрос предложений». Несовместимость стандартов усиливает привязанность к конкретным поставщикам.</p>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:20px;">
+      <div class="card-title"><i data-lucide="map-pin"></i> Многорегиональность и требования к присутствию</div>
+      <div class="grid-2" style="gap:20px;">
+        <div>
+          <p style="font-size:13px;font-weight:600;margin-bottom:10px;color:var(--color-primary);">Охваченные федеральные округа</p>
+          <div class="tag-cloud">
+            <span class="tag lg">ПФО (основной)</span>
+            <span class="tag">СЗФО (Коми, Калининград)</span>
+            <span class="tag">СФО (Кемеровская обл.)</span>
+            <span class="tag">УФО (Челябинская обл.)</span>
+          </div>
+          <p style="font-size:12px;color:var(--color-text-muted);margin-top:10px;">Присутствие в четырёх ФО создаёт повышенные требования к логистике полевых работ и региональным офисам проектировщика.</p>
+        </div>
+        <div>
+          <p style="font-size:13px;font-weight:600;margin-bottom:10px;color:var(--color-primary);">Перспективные ниши для поставщиков</p>
+          <div class="tag-cloud">
+            <span class="tag accent-tag">ПИР АЗС Татнефти</span>
+            <span class="tag accent-tag">ПИР месторождений Белкамнефть</span>
+            <span class="tag accent-tag">Пожарная безопасность</span>
+            <span class="tag accent-tag">Рекультивация и экология ПФО</span>
+            <span class="tag accent-tag">Обучение ценообразованию</span>
+            <span class="tag accent-tag">Лицензии ГРАНД-Смета</span>
+            <span class="tag accent-tag">РД технол. печей ТАНЕКО</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px;border-left:4px solid var(--color-primary);">
+      <div class="card-title"><i data-lucide="lightbulb"></i> Ключевые выводы анализа</div>
+      <div class="grid-2">
+        <div>
+          <div class="stat-row"><span class="stat-key">Концентрация: 2 холдинга</span><span class="stat-val">67,2% рынка</span></div>
+          <div class="stat-row"><span class="stat-key">Главный заказчик — ПАО «Татнефть»</span><span class="stat-val">41,4% (24 проц.)</span></div>
+          <div class="stat-row"><span class="stat-key">Рост рынка (экстраполяция)</span><span class="stat-val">+95% г/г</span></div>
+          <div class="stat-row"><span class="stat-key">Прирост без Татнефти</span><span class="stat-val">Стабильно (0%)</span></div>
+          <div class="stat-row"><span class="stat-key">Раскрытость НМЦК</span><span class="stat-val">12,1% (очень низкая)</span></div>
+        </div>
+        <div>
+          <div class="stat-row"><span class="stat-key">Уникальность выборки vs ХМАО/ЯНАО</span><span class="stat-val">АЗС-сегмент + нефтехимия</span></div>
+          <div class="stat-row"><span class="stat-key">Аномалия Роснефти</span><span class="stat-val">64% — образование</span></div>
+          <div class="stat-row"><span class="stat-key">Долгосрочные договоры</span><span class="stat-val">Ритэк, Татнефть, ГПН</span></div>
+          <div class="stat-row"><span class="stat-key">Провинция</span><span class="stat-val">Зрелые месторождения ПФО</span></div>
+          <div class="stat-row"><span class="stat-key">Сезонность</span><span class="stat-val">Февраль–март (пик)</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  Тендерный анализ ПИР, сметных расчётов и подготовки смет | ПФО 2025–2026 &nbsp;&nbsp;|&nbsp;&nbsp; <a href="https://www.touchoil.pro" style="color:var(--color-primary);">touchoil.pro</a> &nbsp;|&nbsp; office@touchoil.pro
+</footer>
+
+<script>
+// ===== CHART.JS DEFAULTS =====
+Chart.defaults.font.family = "'Inter', sans-serif";
+Chart.defaults.font.size = 12;
+Chart.defaults.color = '#5a6480';
+Chart.defaults.plugins.legend.labels.usePointStyle = true;
+Chart.defaults.plugins.legend.labels.padding = 16;
+
+const COLORS = ['#1e4799','#e05c1a','#2a8a52','#6b3fa0','#0e7ea6','#d4860e'];
+
+// 1. Leaders Pie
+new Chart(document.getElementById('leadersPieChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Татнефть (25)', 'Роснефть (14)', 'Белкамнефть (10)', 'Лукойл (5)', 'Газпром нефть (4)'],
+    datasets: [{
+      data: [25, 14, 10, 5, 4],
+      backgroundColor: COLORS,
+      borderWidth: 3,
+      borderColor: '#fff',
+      hoverOffset: 8
+    }]
+  },
+  options: {
+    responsive: true,
+    cutout: '60%',
+    plugins: {
+      legend: { position: 'right' },
+      tooltip: {
+        callbacks: {
+          label: ctx => ` ${ctx.label}: ${ctx.raw} проц. (${(ctx.raw/58*100).toFixed(1)}%)`
+        }
+      }
+    }
+  }
+});
+
+// 2. Dynamics Bar
+new Chart(document.getElementById('dynamicsBarChart'), {
+  type: 'bar',
+  data: {
+    labels: ['2025 (факт)', '2026 янв–апр (факт)', '2026 (прогноз)'],
+    datasets: [{
+      label: 'Количество процедур',
+      data: [37, 21, 72],
+      backgroundColor: ['#1e4799', '#2a8a52', 'rgba(30,71,153,0.4)'],
+      borderRadius: 6,
+      borderSkipped: false
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: {
+        beginAtZero: true,
+        grid: { color: '#f0f2f7' },
+        ticks: { stepSize: 10 }
+      },
+      x: { grid: { display: false } }
+    }
+  }
+});
+
+// 3. Tempo Chart
+new Chart(document.getElementById('tempoChart'), {
+  type: 'line',
+  data: {
+    labels: ['2025 (средн./мес.)', '2026 (средн./мес.)', '2026 прогноз/мес.'],
+    datasets: [{
+      label: 'Процедур / месяц',
+      data: [3.08, 6.0, 6.0],
+      borderColor: '#e05c1a',
+      backgroundColor: 'rgba(224,92,26,0.1)',
+      fill: true,
+      tension: 0.4,
+      pointRadius: 6,
+      pointBackgroundColor: '#e05c1a'
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: {
+        beginAtZero: true,
+        grid: { color: '#f0f2f7' }
+      },
+      x: { grid: { display: false } }
+    }
+  }
+});
+
+// 4. By Customer grouped bar
+new Chart(document.getElementById('byCustomerChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Татнефть', 'Роснефть', 'Белкамнефть', 'Лукойл', 'Газпром нефть'],
+    datasets: [
+      {
+        label: '2025 (факт)',
+        data: [11, 10, 9, 4, 3],
+        backgroundColor: '#1e4799',
+        borderRadius: 4
+      },
+      {
+        label: '2026 янв–апр',
+        data: [14, 4, 1, 1, 1],
+        backgroundColor: '#f4801a',
+        borderRadius: 4
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { position: 'top' } },
+    scales: {
+      y: { beginAtZero: true, grid: { color: '#f0f2f7' }, ticks: { stepSize: 5 } },
+      x: { grid: { display: false } }
+    }
+  }
+});
+
+// 5. Forecast grouped bar
+new Chart(document.getElementById('forecastChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Татнефть', 'Роснефть', 'Белкамнефть', 'Лукойл', 'Газпром нефть'],
+    datasets: [
+      {
+        label: '2025 (факт)',
+        data: [11, 10, 9, 4, 3],
+        backgroundColor: 'rgba(30,71,153,0.5)',
+        borderRadius: 4
+      },
+      {
+        label: '2026 (прогноз)',
+        data: [48, 14, 3, 3, 3],
+        backgroundColor: '#2a8a52',
+        borderRadius: 4
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { position: 'top' } },
+    scales: {
+      y: { beginAtZero: true, grid: { color: '#f0f2f7' } },
+      x: { grid: { display: false } }
+    }
+  }
+});
+
+// 6. Top Positions Horizontal Bar
+new Chart(document.getElementById('topPositionsChart'), {
+  type: 'bar',
+  indexAxis: 'y',
+  data: {
+    labels: [
+      'ПИР обустройства месторождений',
+      'Обучение и аттестация',
+      'ПИР АЗС и дорожный сервис',
+      'Сметное / проектное ПО',
+      'Пожарная сигнализация (ОПС/СОУЭ)',
+      'Экологические проекты',
+      'Техперевооружение оборудования',
+      'Прочие (экспертиза, ИБ и др.)',
+      'Геологическое изучение',
+      'Инженерные изыскания',
+      'Межевание и кадастр',
+      'Спец. проектные работы'
+    ],
+    datasets: [{
+      label: 'Процедур',
+      data: [16, 8, 7, 4, 4, 4, 3, 4, 2, 2, 2, 2],
+      backgroundColor: [
+        '#1e4799','#e05c1a','#2a8a52','#6b3fa0','#0e7ea6',
+        '#d4860e','#1e4799','#aaa','#6b3fa0','#0e7ea6','#d4860e','#aaa'
+      ],
+      borderRadius: 4
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: ctx => ` ${ctx.raw} проц. (${(ctx.raw/58*100).toFixed(1)}%)`
+        }
+      }
+    },
+    scales: {
+      x: { beginAtZero: true, grid: { color: '#f0f2f7' }, ticks: { stepSize: 2 } },
+      y: { grid: { display: false }, ticks: { font: { size: 11 } } }
+    }
+  }
+});
+
+// 7. Procedure Type Pie
+new Chart(document.getElementById('procedureTypeChart'), {
+  type: 'doughnut',
+  data: {
+    labels: [
+      'Запрос предложений (Татнефть)',
+      'Запрос цен (Роснефть, Лукойл)',
+      'Тендер (Белкамнефть, ГПН)',
+      'Мониторинг цен (Роснефть)',
+      'Прочие форматы'
+    ],
+    datasets: [{
+      data: [25, 13, 11, 3, 6],
+      backgroundColor: COLORS,
+      borderWidth: 3,
+      borderColor: '#fff',
+      hoverOffset: 6
+    }]
+  },
+  options: {
+    responsive: true,
+    cutout: '55%',
+    plugins: {
+      legend: { position: 'bottom', labels: { font: { size: 11 } } },
+      tooltip: {
+        callbacks: {
+          label: ctx => ` ${ctx.label}: ${ctx.raw} (${(ctx.raw/58*100).toFixed(1)}%)`
+        }
+      }
+    }
+  }
+});
+
+// ===== Lucide icons =====
+lucide.createIcons();
+
+// ===== Active nav highlight =====
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-link');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      navLinks.forEach(l => l.classList.remove('active'));
+      const a = document.querySelector(`.nav-link[href="#${e.target.id}"]`);
+      if (a) a.classList.add('active');
+    }
+  });
+}, { threshold: 0.3 });
+sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
